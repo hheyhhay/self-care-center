@@ -3,7 +3,7 @@ ___
 ## Contributors
 - Hayley Dixon(github.com/hheyhhay)
 
-##Technologies Used
+## Technologies Used
 - JavaScript, HTML, & css
 ##Project Intent
 - The _Self Care Center_ project is intended for users to be able to choice between a  mantra message or an affirmation message. The messages will loop through the entire list of messages before it shows a duplicate. If a message does not speak to the user, they can delete it.
