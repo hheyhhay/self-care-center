@@ -35,96 +35,80 @@ mantras = [
 
 // Varibles
 var recieveBtn = document.querySelector('.recieve-message');
-var affirmationCheck = document.getElementById('affirmation');
-var mantraCheck = document.getElementById('mantra');
-var bellImg = document.querySelector('.meditation-bell');
 var messageDisplay = document.querySelector('.print-message');
-var checkBoxesClass = document.querySelector('.checkbox');
-var uncheckedBox = document.getElementById('unchecked-box');
-var inputElement = document.querySelector('.circle-btn');
-var form = document.querySelector('form');
-var deleteMessageBtn = document.querySelector('.delete-message');
-var displayedAffirmationMessages = [];
-var displayedMantraMessages = [];
+var deleteBtn = document.querySelector('.delete-message');
+var usedAffirmations = [];
+var usedMantras = [];
 var currentMessage ="";
+var checkedBox = "";
 
-recieveBtn.addEventListener('click', displayMessage);
-deleteMessageBtn.addEventListener('click', deleteMessage);
+
+//eventListeners
+recieveBtn.addEventListener('click', displayNewMessage);
+deleteBtn.addEventListener('click', deleteMessage);
+
+//functions
 
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
-}
+};
 
-var messageVar = "";
+function pickMessage() {
+  var messageOptions = document.getElementsByName('message-choice');
 
-function checkBoxes() {
-  var messageChoice = document.getElementsByName('message-choice'); // this choices b/w the affirmation or mantra box
-  // var messageVar = "";
-
-    for (var i = 0; i<messageChoice.length; i++){
-      if(messageChoice[i].checked) {
-          messageVar = messageChoice[i].value;
-          }
-
-          if (messageVar === 'affirmation') {
+  for (var i = 0; i<messageOptions.length; i++){
+      if(messageOptions[i].checked) {
+          checkedBox = messageOptions[i].value;
+          } if (checkedBox === 'affirmation') {
             currentMessage = affirmations[getRandomIndex(affirmations)];
-
-              if (!displayedAffirmationMessages.includes(currentMessage)) {
-                console.log('current message before push', currentMessage)
-                displayedAffirmationMessages.push(currentMessage);
-                return messageDisplay.innerText = currentMessage
-              } else if (displayedAffirmationMessages.includes(currentMessage)) {
-                  if (displayedAffirmationMessages.length < affirmations.length) {
+              if (!usedAffirmations.includes(currentMessage)) {
+                usedAffirmations.push(currentMessage);
+                return messageDisplay.innerText = currentMessage;
+              } else if (usedAffirmations.includes(currentMessage)) {
+                  if (usedAffirmations.length < affirmations.length) {
                     currentMessage = affirmations[getRandomIndex(affirmations)];
-                    console.log('current message reassignment', currentMessage)
-                    displayedAffirmationMessages.push(currentMessage);
-                    return messageDisplay.innerText = ` hitting a double${currentMessage}`
-                  } else if (displayedAffirmationMessages.length >= affirmations.length) {
-                    displayedAffirmationMessages = [];
-                    console.log('should now be empty', displayedAffirmationMessages);
-                    currentMessage = 'Have displayed all the Affirmation Messages, restarting loop now.'
+                    usedAffirmations.push(currentMessage);
+                    return messageDisplay.innerText = currentMessage
+                  } else if (usedAffirmations.length >= affirmations.length) {
+                    usedAffirmations = [];
+                    currentMessage = '✨ Have displayed all the Affirmation Messages, restarting loop now.✨'
                   }return messageDisplay.innerText = currentMessage;
               }
-        } else if (messageVar === 'mantra') {
+        } else if (checkedBox === 'mantra') {
             currentMessage = mantras[getRandomIndex(mantras)];
-            if (!displayedMantraMessages.includes(currentMessage)){
-                displayedMantraMessages.push(currentMessage);
-                return messageDisplay.innerText = currentMessage
-          } else if (displayedMantraMessages.includes(currentMessage)){
-                if (displayedMantraMessages.length < mantras.length) {
+            if (!usedMantras.includes(currentMessage)){
+                usedMantras.push(currentMessage);
+                return messageDisplay.innerText = currentMessage;
+          } else if (usedMantras.includes(currentMessage)){
+                if (usedMantras.length < mantras.length) {
                     currentMessage = mantras[getRandomIndex(mantras)];
-                    displayedMantraMessages.push(currentMessage);
+                    usedMantras.push(currentMessage);
                     return messageDisplay.innerText = currentMessage;
-              } else if (displayedMantraMessages.length >= mantras.length) {
-                    displayedMantraMessages = [];
+              } else if (usedMantras.length >= mantras.length) {
+                    usedMantras = [];
                     currentMessage = 'Have displayed all the Mantra Messages, restarting loop now';
                     return messageDisplay.innerText = currentMessage;
                     }
                   }
                 }
             }
-      };
+};
 
-
-
-function displayMessage(){
+function displayNewMessage(){
   messageDisplay.classList.remove("hidden");
-  deleteMessageBtn.classList.remove("hidden");
-  bellImg.classList.add("hidden");
-  checkBoxes();
-}
-
-
+  deleteBtn.classList.remove("hidden");
+  document.querySelector('.meditation-bell').classList.add("hidden");
+  pickMessage();
+};
 
 function deleteMessage(){
-  if (messageVar === 'affirmation') {
+  if (checkedBox === 'affirmation') {
     for (var i = 0; i<affirmations.length; i++){
       if (affirmations[i].includes(currentMessage)) {
         affirmations.splice(i, 1);
-        console.log('affirmations', affirmations)
       }
     }
-  } else if (messageVar === 'mantra') {
+  } else if (checkedBox === 'mantra') {
       for (var i = 0; i<mantras.length; i++) {
         if( mantras[i].includes(currentMessage)) {
           mantras.splice(i, 1)
@@ -132,23 +116,7 @@ function deleteMessage(){
         }
       }
   }
-  messageDisplay.innerText = `The message:
-                            (${currentMessage})
-                            has been deleted`;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//ddd
+  messageDisplay.innerText = `✨ The message:
+                            ${currentMessage}
+                            has been deleted ✨`;
+};
